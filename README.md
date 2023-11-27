@@ -9,7 +9,7 @@ Criei esse plug para sites wordpress
 
 A função dele é redirecionar ips que não são do Brasil e envia-los para outra página de URL escolhida(sendo uma página white)
 Deixando assim o URL principal invisível para esses IPS que partem de fora. 
-Ou seja: ips de Maquinas do facebook que analizam págianas de destinos dos anúncios na Meta são de servidores internacionais 
+Ou seja: ips de Maquinas do facebook que analizam páginas de destinos dos anúncios na Meta são de servidores internacionais 
 
 é possível fazer o testa da eficássia dessa função
 
