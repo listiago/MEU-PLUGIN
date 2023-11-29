@@ -6,9 +6,6 @@ Version: 1.0
 Author: Tiago Lins 
 */
 
-// Chave da API ipstack
-define('IPSTACK_API_KEY', 'bc780bba2a8ec2c641c1c95f0259bf53');
-
 // Adiciona o gancho para verificar o país e redirecionar
 add_action('init', 'country_redirector_init');
 
@@ -43,19 +40,26 @@ function country_redirector_settings_page() {
                     <th scope="row">Link de Redirecionamento (para países não-BR):</th>
                     <td><input type="text" name="country_redirector_redirect_link" value="<?php echo esc_attr(get_option('country_redirector_redirect_link')); ?>" /></td>
                 </tr>
+                <tr valign="top">
+                    <th scope="row">Chave da API ipinfo.io:</th>
+                    <td><input type="text" name="country_redirector_ipinfo_api_key" value="<?php echo esc_attr(get_option('country_redirector_ipinfo_api_key')); ?>" /></td>
+                </tr>
             </table>
+
             <?php
             submit_button();
             ?>
         </form>
     </div>
+
     <?php
+    
 }
 
 function country_redirector_init() {
     if (!is_admin() && !defined('DOING_AJAX')) {
         $user_country = get_user_country();
-        
+
         // Obtenha os links a partir das opções de configuração
         $main_link = get_option('country_redirector_main_link', 'http://example.com');
         $redirect_link = get_option('country_redirector_redirect_link', 'http://example.com');
@@ -68,10 +72,21 @@ function country_redirector_init() {
     }
 }
 
+// Registra as configurações e os campos no painel de administração
+add_action('admin_init', 'country_redirector_settings');
+
+function country_redirector_settings() {
+    register_setting('country_redirector_settings', 'country_redirector_main_link');
+    register_setting('country_redirector_settings', 'country_redirector_redirect_link');
+    register_setting('country_redirector_settings', 'country_redirector_ipinfo_api_key');
+}
+
 // Função para obter o país do usuário com base no IP usando ipstack
 function get_user_country() {
     $ip = $_SERVER['REMOTE_ADDR'];
-    $api_url = "http://api.ipstack.com/$ip?access_key=" . IPSTACK_API_KEY;
+    $api_key = get_option('country_redirector_ipinfo_api_key'); // Obtenha a chave da API das opções
+
+    $api_url = "http://ipinfo.io/$ip/json?token=" . $api_key;
 
     $response = wp_remote_get($api_url);
 
@@ -82,14 +97,6 @@ function get_user_country() {
     $body = wp_remote_retrieve_body($response);
     $data = json_decode($body);
 
-    return isset($data->country_code) ? $data->country_code : false;
-}
-
-// Registra as configurações e os campos no painel de administração
-add_action('admin_init', 'country_redirector_settings');
-
-function country_redirector_settings() {
-    register_setting('country_redirector_settings', 'country_redirector_main_link');
-    register_setting('country_redirector_settings', 'country_redirector_redirect_link');
+    return isset($data->country) ? $data->country : false;
 }
 ?>
