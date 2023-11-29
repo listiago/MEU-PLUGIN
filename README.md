@@ -7,7 +7,7 @@ licença:
 Criei esse plug para sites wordpress
 Útil para contigencia de facebook ads
 
-A função dele é redirecionar ips que não são do Brasil e envia-los para outra página de URL escolhida(sendo uma página white)
+A função dele é Criar uma opção nas configurações do painel do wordpress, onde mostra a opção de redirecionar ips que não são do Brasil e envia-los para outra página de URL escolhida(sendo uma página white)
 Deixando assim o URL principal invisível para esses IPS que partem de fora. 
 Ou seja: ips de Maquinas do facebook que analizam páginas de destinos dos anúncios na Meta são de servidores internacionais 
 
